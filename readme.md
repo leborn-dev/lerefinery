@@ -1,3 +1,7 @@
+> **Notice:** This is **LeRefinery**, a [Leborn](https://github.com/leborn-dev) fork of Refinery CMS. We are reviving this project for the AI era. See [`LEBORN.md`](./LEBORN.md) and [`NOTICE`](./NOTICE) for details.
+
+---
+
 # Refinery CMS
 
 __An open source content management system for Rails 6.1+ through 8.1+__
