@@ -17,6 +17,21 @@ module Refinery
       FileUtils.rm_r destination_root
     end
 
+    it 'generates a dependency graph with safe Rails defaults and the verified CMS source' do
+      gemfile = File.join(destination_root, 'vendor/extensions/rspec_product_tests/Gemfile')
+      definition = Bundler::Dsl.evaluate(gemfile, nil, {})
+      rails = definition.dependencies.find { |dependency| dependency.name == 'rails' }
+      expect(rails).not_to eq(nil)
+      expect(rails.requirement.satisfied_by?(Gem::Version.new('6.1.7.10'))).to be(false)
+      expect(rails.requirement.satisfied_by?(Gem::Version.new('8.1.4'))).to be(true)
+      cms = definition.dependencies.find { |dependency| dependency.name == 'refinerycms' }
+      expect(cms.source.uri).to eq('https://github.com/leborn-dev/lerefinery.git')
+      expect(cms.source.ref).to eq('aec890afdf30444010c04d4997c6ac86e99e08ee')
+      decorators = definition.dependencies.find { |dependency| dependency.name == 'decorators' }
+      expect(decorators.source.ref).to eq('8ba6dc68c30b5400ee97c642d57748ecaa94830c')
+      expect(definition.dependencies.map(&:name)).not_to include('therubyracer')
+    end
+
     it "uses reference columns for image and resource attributes" do
       File.open("#{destination_root}/vendor/extensions/rspec_product_tests/app/controllers/refinery/rspec_product_tests/admin/rspec_product_tests_controller.rb") do |file|
         content = file.read

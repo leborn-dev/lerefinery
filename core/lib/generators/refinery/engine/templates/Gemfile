@@ -2,13 +2,22 @@ source "https://rubygems.org"
 
 gemspec
 
-git 'https://github.com/refinery/refinerycms.git', :branch => 'master' do
+# Safe defaults for newly generated development/test applications.
+gem 'rails', '>= 7.2.4', '< 9'
+
+# Verified security remediation snapshot; see readme.md before updating.
+git 'https://github.com/leborn-dev/lerefinery.git', :ref => 'aec890afdf30444010c04d4997c6ac86e99e08ee' do
   gem 'refinerycms'
 
   group :development, :test do
-    gem 'refinerycms-testing'
+    gem 'refinerycms-testing', '~> <%= Refinery::Version %>'
   end
 end
+
+# The published decorators gem caps railties below the patched Rails line.
+# Use the same verified Zeitwerk-compatible source as Refinery's own Gemfile.
+gem 'decorators', git: 'https://github.com/parndt/decorators.git',
+                  ref: '8ba6dc68c30b5400ee97c642d57748ecaa94830c'
 
 # Database Configuration
 platforms :jruby do
@@ -20,23 +29,20 @@ end
 
 platforms :ruby do
   gem 'sqlite3'
-  gem 'mysql2', '~> 0.4.10'
+  gem 'mysql2', '~> 0.5', '>= 0.5.7'
   gem 'pg'
 end
 
 group :development, :test do
   gem 'rspec-its' # for the model's validation tests.
-  platforms :ruby do
-    require 'rbconfig'
-    if RbConfig::CONFIG['target_os'] =~ /linux/i
-      gem 'therubyracer', '~> 0.11.4'
-    end
-  end
+  # Hash.from_xml in the test helpers requires an explicit, patched REXML.
+  gem 'rexml', '>= 3.4.4'
 end
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'sass-rails'
+  # ExecJS uses the supported Node.js LTS runtime documented in readme.md.
   gem 'uglifier'
 end
