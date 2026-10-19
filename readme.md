@@ -4,7 +4,11 @@
 
 # Refinery CMS
 
-__An open source content management system for Rails 6.1+ through 8.1+__
+__An open source content management system for Rails 7.2.4+ through 8.1+__
+
+**Security upgrade:** Rails 6.1–7.1 are no longer supported. See
+[the dependency upgrade guide](SECURITY_UPGRADE.md) for safe per-series versions
+and the required decorators source pin.
 
 You can deploy an example app to Heroku:
 

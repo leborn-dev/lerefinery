@@ -313,17 +313,31 @@ module Refinery
     end
 
     def increment_migration_timestamp(path)
-      # Increment the migration file leading number
-      # Only relevant for nested or namespaced extensions, where a previous migration exists
+      # Increment only the filename; a namespace directory may itself contain digits.
+      filename = path.basename.to_s
       return path unless path.dirname.basename.to_s == 'migrate' &&
-                         /\A\d/ === path.basename.to_s &&
-                         path.basename.to_s.end_with?('.rb.erb') && last_migration_file(path)
+                         filename.end_with?('.rb.erb') && migration_number(filename)
 
-      path.sub(%r{\d+_}) { |m| "#{last_migration_file(path).match(%r{migrate/(\d+)_})[1].to_i + 1}_" }
+      previous = last_migration_file(path)
+      return path unless previous
+
+      next_number = migration_number(File.basename(previous)).to_i + 1
+      path.dirname.join("#{next_number}_#{filename.partition('_').last}")
     end
 
     def last_migration_file(path)
-      Dir[destination_pathname.join(path.dirname + '*.rb')].sort.last
+      Dir[destination_pathname.join(path.dirname + '*.rb')].filter_map do |migration|
+        number = migration_number(File.basename(migration))
+        [number.to_i, migration] if number
+      end.max_by(&:first)&.last
+    end
+
+    def migration_number(filename)
+      number, separator, = filename.partition('_')
+      return if separator.empty? || number.empty?
+      return unless number.each_byte.all? { |byte| byte >= 48 && byte <= 57 }
+
+      number
     end
 
     def prevent_clashes!

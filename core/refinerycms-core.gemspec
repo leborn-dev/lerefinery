@@ -3,7 +3,11 @@
 require File.expand_path('../core/lib/refinery/version', __dir__)
 
 version = Refinery::Version.to_s
-rails_version = ['>= 6.1.0', '< 9']
+# RubyGems cannot express disjoint version ranges; exclude the known unsafe
+# Rails 8 stable releases. See SECURITY_UPGRADE.md for the per-series floors.
+rails_version = ['>= 7.2.4', '< 9',
+                 '!= 8.0.0', '!= 8.0.0.1', '!= 8.0.1', '!= 8.0.2', '!= 8.0.2.1', '!= 8.0.3', '!= 8.0.4', '!= 8.0.4.1', '!= 8.0.5',
+                 '!= 8.1.0', '!= 8.1.1', '!= 8.1.2', '!= 8.1.2.1', '!= 8.1.3']
 
 Gem::Specification.new do |s|
   s.platform          = Gem::Platform::RUBY

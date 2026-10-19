@@ -7,9 +7,6 @@ gemspec
 # Allow CI and us to test specific Rails versions
 gem 'rails', ENV.fetch('RAILS_VERSION', '>= 7.2.4')
 
-# Ruby 3.4+ extracted mutex_m from stdlib, but older Rails versions need it
-gem 'mutex_m' if RUBY_VERSION >= '3.4' && ENV['RAILS_VERSION']&.match?(/^~> [67]\./)
-
 gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'net-smtp', require: false
@@ -38,12 +35,7 @@ gem 'decorators', github: 'parndt/decorators', branch: 'zeitwerk'
 # Database Configuration
 if !ENV['CI'] || ENV['DB'] == 'sqlite3'
   gem 'activerecord-jdbcsqlite3-adapter', '>= 1.3.0.rc1', platform: :jruby
-  # Rails 6.1 and 7.0 require sqlite3 ~> 1.4, Rails 7.1+ can use newer versions
-  if ENV['RAILS_VERSION']&.match?(/[67]\.[01]/)
-    gem 'sqlite3', '~> 1.4.0', platform: :ruby
-  else
-    gem 'sqlite3', platform: :ruby
-  end
+  gem 'sqlite3', '>= 2.9.6', platform: :ruby
 end
 
 if !ENV['CI'] || ENV['DB'] == 'mysql'
