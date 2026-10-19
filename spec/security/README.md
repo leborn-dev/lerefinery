@@ -1,13 +1,16 @@
 # Security regressions
 
 Use an isolated development installation and SQLite; these tests never need a
-production database. The Gemfile's default Rails floor is for this repository's
-development graph only. The published gem's Rails 6.1+ compatibility range is
-unchanged, and `RAILS_VERSION` still selects compatibility test versions.
+production database. The repository and public core gem now require Rails 7.2.4
+or a patched Rails 8 release. See [the security upgrade guide](../../SECURITY_UPGRADE.md)
+for the breaking dependency minimum, per-series floors and decorators pin.
+`RAILS_VERSION` selects supported compatibility test versions.
 
 ```sh
 bundle install
 bundle exec bundler-audit check --update
+ruby spec/security/dependency_policy_test.rb
+bundle exec ruby spec/security/sqlite_adapter_compatibility_test.rb
 bundle exec ruby spec/security/ruby_security_test.rb
 ruby spec/security/migration_complexity_test.rb
 npm ci --prefix spec/security --ignore-scripts

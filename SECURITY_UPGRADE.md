@@ -44,3 +44,11 @@ compatibility regression checks real CRUD, type round trips, prepared binds,
 rollback, custom functions and aggregate functions. Generated extensions keep
 JavaScript compression through the documented supported Node.js LTS runtime.
 Product APIs and existing CMS content behavior are retained.
+
+Generated extension Gemfiles pin the reviewed source snapshot
+`dcceb2f22ad01816d089064ae5872a795a7bbb6e`, which includes these runtime
+requirements and the migration helper fix. This is a two-stage source pin: the
+implementation commit is created first, then the generator pin is updated in a
+subsequent commit. It is not a self-referential revision or a moving upstream
+branch. Re-run clean generation, full bundle audit, ordinary tests and asset
+compilation before updating that pin.

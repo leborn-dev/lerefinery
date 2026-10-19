@@ -34,7 +34,7 @@ module Refinery
       expect(sqlite.requirement.satisfied_by?(Gem::Version.new('2.9.5'))).to be(false)
       cms = definition.dependencies.find { |dependency| dependency.name == 'refinerycms' }
       expect(cms.source.uri).to eq('https://github.com/leborn-dev/lerefinery.git')
-      expect(cms.source.ref).to eq('aec890afdf30444010c04d4997c6ac86e99e08ee')
+      expect(cms.source.ref).to eq('dcceb2f22ad01816d089064ae5872a795a7bbb6e')
       decorators = definition.dependencies.find { |dependency| dependency.name == 'decorators' }
       expect(decorators.source.ref).to eq('8ba6dc68c30b5400ee97c642d57748ecaa94830c')
       expect(definition.dependencies.map(&:name)).not_to include('therubyracer')

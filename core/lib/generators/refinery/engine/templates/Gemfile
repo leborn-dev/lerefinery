@@ -8,7 +8,7 @@ gem 'rails', '>= 7.2.4', '< 9',
              '!= 8.1.0', '!= 8.1.1', '!= 8.1.2', '!= 8.1.2.1', '!= 8.1.3'
 
 # Verified security remediation snapshot; see readme.md before updating.
-git 'https://github.com/leborn-dev/lerefinery.git', :ref => 'aec890afdf30444010c04d4997c6ac86e99e08ee' do
+git 'https://github.com/leborn-dev/lerefinery.git', :ref => 'dcceb2f22ad01816d089064ae5872a795a7bbb6e' do
   gem 'refinerycms'
 
   group :development, :test do
