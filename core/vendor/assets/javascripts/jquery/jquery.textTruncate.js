@@ -134,16 +134,17 @@
 					$this.attr("title", text);
 				}
 
-				while ($td.width() >= targetWidth ) {
+				while (textlength > 0 && $td.width() >= targetWidth ) {
 					textlength--;
-					$td.html($td.html().substring(0, textlength)); // .html(val) is faster than .text(val) and we already used .text(val) to strip/escape html
+					$td.text(text.substring(0, textlength));
 				}
 
-				text = $.trim( $td.html() );
-				$this.html( text + options.tail );
+				text = $.trim( $td.text() );
+				// Body text is untrusted; only the caller-supplied tail is HTML.
+				$this.text( text ).append( options.tail );
 
 			} else {
-				$this.html( text );
+				$this.text( text );
 			}
 
 			this.style.visibility = "visible";

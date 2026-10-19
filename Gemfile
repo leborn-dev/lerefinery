@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Allow CI and us to test specific Rails versions
-gem 'rails', ENV['RAILS_VERSION'] if ENV['RAILS_VERSION']
+gem 'rails', ENV.fetch('RAILS_VERSION', '>= 7.2.4')
 
 # Ruby 3.4+ extracted mutex_m from stdlib, but older Rails versions need it
 gem 'mutex_m' if RUBY_VERSION >= '3.4' && ENV['RAILS_VERSION']&.match?(/^~> [67]\./)
@@ -69,6 +69,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'bundler-audit', require: false
   gem 'generator_spec', '~> 0.9.3'
   gem 'launchy'
   gem 'refinerycms-testing', path: './testing'
