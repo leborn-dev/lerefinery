@@ -24,6 +24,14 @@ module Refinery
       expect(rails).not_to eq(nil)
       expect(rails.requirement.satisfied_by?(Gem::Version.new('6.1.7.10'))).to be(false)
       expect(rails.requirement.satisfied_by?(Gem::Version.new('8.1.4'))).to be(true)
+      %w[7.1.6 8.0.5 8.1.3].each do |unsafe|
+        expect(rails.requirement.satisfied_by?(Gem::Version.new(unsafe))).to be(false)
+      end
+      %w[7.2.4 8.0.5.1 8.1.3.1].each do |safe|
+        expect(rails.requirement.satisfied_by?(Gem::Version.new(safe))).to be(true)
+      end
+      sqlite = definition.dependencies.find { |dependency| dependency.name == 'sqlite3' }
+      expect(sqlite.requirement.satisfied_by?(Gem::Version.new('2.9.5'))).to be(false)
       cms = definition.dependencies.find { |dependency| dependency.name == 'refinerycms' }
       expect(cms.source.uri).to eq('https://github.com/leborn-dev/lerefinery.git')
       expect(cms.source.ref).to eq('aec890afdf30444010c04d4997c6ac86e99e08ee')

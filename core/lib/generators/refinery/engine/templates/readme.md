@@ -15,7 +15,9 @@ Install a supported Ruby version and a supported Node.js LTS runtime before
 running `bundle install`. ExecJS/Uglifier uses Node.js for JavaScript compression;
 the obsolete therubyracer/V8 3.11 dependency is no longer needed. The generated
 Gemfile chooses a patched Rails version for development and testing. This does
-not change the extension's published Refinery/Rails compatibility requirements.
+requires Rails 7.2.4 or a patched Rails 8 release (8.0.5.1+ / 8.1.3.1+).
+The current Refinery release also raises its minimum supported Rails version for
+security: older Rails series have unresolved upstream advisories.
 
 The development Gemfile pins the security-reviewed Refinery source at
 https://github.com/leborn-dev/lerefinery/commit/aec890afdf30444010c04d4997c6ac86e99e08ee.

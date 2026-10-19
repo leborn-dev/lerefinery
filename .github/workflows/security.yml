@@ -27,6 +27,8 @@ jobs:
         run: |
           env -u CI bundle install
           env -u CI bundle exec bundler-audit check --update
+      - run: ruby spec/security/dependency_policy_test.rb
+      - run: env -u CI bundle exec ruby spec/security/sqlite_adapter_compatibility_test.rb
       - run: env -u CI bundle exec ruby spec/security/ruby_security_test.rb
       - run: ruby spec/security/migration_complexity_test.rb
       - run: npm ci --prefix spec/security --ignore-scripts
