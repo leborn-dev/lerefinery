@@ -1,0 +1,35 @@
+name: Security regressions
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      DB: sqlite3
+      RAILS_VERSION: '~> 8.1.0'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Install native database build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libmysqlclient-dev libpq-dev
+      - name: Install and audit every database group
+        run: |
+          env -u CI bundle install
+          env -u CI bundle exec bundler-audit check --update
+      - run: env -u CI bundle exec ruby spec/security/ruby_security_test.rb
+      - run: ruby spec/security/migration_complexity_test.rb
+      - run: npm ci --prefix spec/security --ignore-scripts
+      - run: npm audit --prefix spec/security --audit-level=low
+      - run: npm test --prefix spec/security
+      - run: JQUERY_UI_ROOT="$(env -u CI bundle show jquery-ui-rails)/app/assets/javascripts/jquery-ui" node --test spec/security/jquery-ui.test.cjs

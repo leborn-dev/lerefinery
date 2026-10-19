@@ -315,7 +315,9 @@ module Refinery
     def increment_migration_timestamp(path)
       # Increment the migration file leading number
       # Only relevant for nested or namespaced extensions, where a previous migration exists
-      return path unless %r{/migrate/\d+.*\.rb.erb\z} === path.to_s && last_migration_file(path)
+      return path unless path.dirname.basename.to_s == 'migrate' &&
+                         /\A\d/ === path.basename.to_s &&
+                         path.basename.to_s.end_with?('.rb.erb') && last_migration_file(path)
 
       path.sub(%r{\d+_}) { |m| "#{last_migration_file(path).match(%r{migrate/(\d+)_})[1].to_i + 1}_" }
     end

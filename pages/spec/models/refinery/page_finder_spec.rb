@@ -29,6 +29,18 @@ module Refinery
       end
     end
 
+    describe 'translated query security' do
+      it 'keeps SQL metacharacters in translated values as literal bound data' do
+        created_page
+        payload = "' OR 1=1 --"
+        expect(Pages::Finder.new(title: payload).find).to be_empty
+        expect(Pages::Finder.new(slug: payload).find).to be_empty
+        expect(Pages::Finder.new(locale: payload).find).to be_empty
+        expect(Pages::Finder.new(title: page_title).find.to_a).to eq([created_page])
+        expect(Pages::Finder.new(locale: [:en, :fr]).find.to_a).to eq([created_page])
+      end
+    end
+
     describe ".find_by_path_or_id" do
       let!(:market) { FactoryBot.create(:page, :title => "market") }
       let(:path) { "market" }

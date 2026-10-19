@@ -1,6 +1,6 @@
 <% server = Refinery::Core.matomo_analytics_server.to_s.strip %>
 <% site_id = Refinery::Core.matomo_analytics_site_id.to_s.strip %>
-<% unless local_request? or admin? or server =~ /^(analytics.example.org)?$/ or site_id =~ /^$/ -%>
+<% unless local_request? or admin? or server.empty? or server == 'analytics.example.org' or site_id.empty? -%>
 <!-- Matomo -->
 <script type="text/javascript">
   var _paq = _paq || [];

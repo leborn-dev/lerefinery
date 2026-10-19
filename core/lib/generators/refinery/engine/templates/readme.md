@@ -8,3 +8,25 @@
 
     # Sign up for a https://rubygems.org/ account and publish the gem
     gem push refinerycms-<%= extension_plural_name %>.gem
+
+## Development and asset compilation
+
+Install a supported Ruby version and a supported Node.js LTS runtime before
+running `bundle install`. ExecJS/Uglifier uses Node.js for JavaScript compression;
+the obsolete therubyracer/V8 3.11 dependency is no longer needed. The generated
+Gemfile chooses a patched Rails version for development and testing. This does
+not change the extension's published Refinery/Rails compatibility requirements.
+
+The development Gemfile pins the security-reviewed Refinery source at
+https://github.com/leborn-dev/lerefinery/commit/aec890afdf30444010c04d4997c6ac86e99e08ee.
+The decorators dependency is likewise pinned to its upstream Zeitwerk-compatible
+commit https://github.com/parndt/decorators/commit/8ba6dc68c30b5400ee97c642d57748ecaa94830c;
+the published 2.0.6 gem otherwise caps Rails below the patched line.
+The source retains Refinery's upstream MIT license and fixes input handling and
+jQuery UI dependencies. It deliberately does not follow the old upstream master
+branch. To update the pin, compare the candidate commit with this snapshot and
+current upstream, generate a fresh extension, install into an empty bundle path,
+and run `bundle exec bundler-audit check --update`. Run the generated extension's
+tests and dummy application's `assets:precompile`, and exercise ExecJS/Uglifier
+compression with Node.js. Commit the verified full source SHA and retain the
+resolved lockfile and audit results. Do not replace the pin with a moving branch.

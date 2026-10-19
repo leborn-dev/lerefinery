@@ -97,3 +97,6 @@ Gemfile.lock
 
 # rspec failures
 .rspec_failures
+
+# JavaScript security regression dependencies
+spec/security/node_modules/
